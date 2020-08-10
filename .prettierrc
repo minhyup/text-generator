@@ -1,0 +1,9 @@
+{
+  "trailingComma": "none", // array등에서 마지막 항목에 콤마를 붙일건지 말건지.. 안붙이게 설정
+  "tabWidth": 2, // 탭 2칸
+  "semi": true, // 세미콜론 있게 설정
+  "singleQuote": true, // 따옴표
+  "bracketSpacing": true, // 괄호 열었을때 공백 넣을지 여부
+  "jsxBracketSameLine": true, // 멀티 라인에서 > 닫는부분을 < 와 맞출지 여부
+  "printWidth": 200
+}
