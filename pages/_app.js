@@ -1,6 +1,7 @@
 import React from "react";
 import Head from "next/head";
-import "../styles/globals.css";
+import "@/styles/globals.css";
+import "antd/dist/antd.css";
 
 //! page app에 루트
 function MyApp({ Component, pageProps }) {
@@ -8,7 +9,8 @@ function MyApp({ Component, pageProps }) {
     <>
       <Head>
         <meta charSet="utf8" />
-        <title>타이틀</title>
+        <title>app 타이틀</title>
+        <link rel="icon" href="/favicon.ico" />
       </Head>
       <Component {...pageProps} />
     </>
