@@ -15,7 +15,11 @@ function MenuLayout({ children }) {
     <div>
       <Layout className="layout">
         <Header>
-          {/* <img src="/vercel.svg" alt="Vercel Logo" className={style.logo} /> */}
+          <Link href="/">
+            <a>
+              <div className={style.logo} />
+            </a>
+          </Link>
           <Menu mode="horizontal" theme="dark">
             <Menu.Item key="gen" icon={<FormOutlined />}>
               <Link href="/gen">
@@ -34,7 +38,12 @@ function MenuLayout({ children }) {
             </Menu.Item>
             <Menu.Item key="join" icon={<UserOutlined />}>
               <Link href="/join">
-                <a>로그인/회원가입</a>
+                <a>회원가입</a>
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="login" icon={<UserOutlined />}>
+              <Link href="/login">
+                <a>로그인</a>
               </Link>
             </Menu.Item>
           </Menu>
@@ -46,20 +55,6 @@ function MenuLayout({ children }) {
           <div className="footer">Footer created by minhyup</div>
         </Footer>
       </Layout>
-      {/* <Menu mode="horizontal">
-        <Menu.Item key="gen" icon={<FormOutlined />}>
-          결과 생성
-        </Menu.Item>
-        <Menu.Item key="team" icon={<UsergroupAddOutlined />}>
-          팀 등록
-        </Menu.Item>
-        <Menu.Item key="member" icon={<UserAddOutlined />}>
-          팀원 등록
-        </Menu.Item>
-        <Menu.Item key="join" icon={<UserOutlined />}>
-          로그인/회원가입
-        </Menu.Item>
-      </Menu> */}
     </div>
   );
 }

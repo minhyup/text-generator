@@ -1,16 +1,7 @@
-.hover {
-  background-color: red;
-}
-
-.hover:hover {
-  background-color: white;
-}
-
-.minhyup {
-  color: black;
-}
-
 .logo {
-  display: inline-block;
-  height: 1em;
+  width: 80px;
+  height: 31px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 16px 24px 16px 0;
+  float: left;
 }

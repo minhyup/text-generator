@@ -3,8 +3,11 @@ import Head from "next/head";
 import "@/styles/globals.css";
 import "antd/dist/antd.css";
 
+import wrapper from "@/store/storeConfig";
+//import wrapper from "../store/storeConfig";
+
 //! page app에 루트
-function MyApp({ Component, pageProps }) {
+const MyApp = ({ Component, pageProps }) => {
   return (
     <>
       <Head>
@@ -15,6 +18,6 @@ function MyApp({ Component, pageProps }) {
       <Component {...pageProps} />
     </>
   );
-}
+};
 
-export default MyApp;
+export default wrapper.withRedux(MyApp);
