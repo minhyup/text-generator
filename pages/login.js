@@ -1,10 +1,11 @@
 import React from "react";
 import MenuLayout from "@/components/layout/MenuLayout";
+import LoginForm from "components/general/LoginForm";
 
 function join() {
   return (
     <MenuLayout>
-      <span>로그인</span>
+      <LoginForm />
     </MenuLayout>
   );
 }

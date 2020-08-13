@@ -1,7 +1,8 @@
 import React from "react";
 import { Form, Input, Checkbox, Button } from "antd";
-import { testAync, joinAync } from "@/store/reducer/user";
+import { joinApiCall } from "@/store/reducer/user";
 import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
 
 const validateMessages = {
   required: "필수 입력 값입니다."
@@ -22,14 +23,15 @@ const tailLayout = {
   wrapperCol: { xs: { span: 24 }, sm: { offset: 4, span: 20 } }
 };
 
-function MemberJoin() {
+function MemberJoinForm() {
   const dispatch = useDispatch();
+  const router = useRouter();
+
   // 유효성 검사 후 실행
   const onFinish = (values) => {
     console.log(values);
-    //dispatch(testAync());
-    dispatch(joinAync(values));
-    //! user:{....}
+    // thunk 호출
+    dispatch(joinApiCall(values));
   };
 
   const onFinishFailed = (param) => {
@@ -138,7 +140,7 @@ function MemberJoin() {
         >
           <Input.Password />
         </Form.Item>
-        <Form.Item name={["user", "introduction"]} label="자기소개">
+        <Form.Item name={["user", "introMsg"]} label="자기소개">
           <Input.TextArea />
         </Form.Item>
         <Form.Item
@@ -172,4 +174,4 @@ function MemberJoin() {
   );
 }
 
-export default MemberJoin;
+export default MemberJoinForm;

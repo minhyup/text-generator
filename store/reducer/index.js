@@ -1,4 +1,5 @@
 import { HYDRATE } from "next-redux-wrapper";
+import { routerReducer } from "connected-next-router";
 import { combineReducers } from "redux";
 import user from "./user";
 
@@ -10,8 +11,14 @@ const rootReducer = (state, action) => {
       console.log("hydrate!");
       return action.payload;
     default: {
-      const combineReducer = combineReducers({ user });
+      const combineReducer = combineReducers({ user, router: routerReducer });
       return combineReducer(state, action);
+      // const createRootReducer = (history) =>
+      //   combineReducers({
+      //     router: connectRouter(history),
+      //     user
+      //   });
+      // return createRootReducer;
     }
   }
 };

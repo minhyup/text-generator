@@ -1,11 +1,11 @@
 import React from "react";
 import MenuLayout from "@/components/layout/MenuLayout";
-import MemberJoin from "components/general/MemberJoin";
+import MemberJoinForm from "components/general/MemberJoinForm";
 
 function join() {
   return (
     <MenuLayout>
-      <MemberJoin />
+      <MemberJoinForm />
     </MenuLayout>
   );
 }
