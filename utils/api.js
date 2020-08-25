@@ -1,5 +1,3 @@
-import { ExceptionMap } from "antd/lib/result";
-
 const sleep = (n) => {
   return new Promise((resolve) => {
     return setTimeout(resolve, n);

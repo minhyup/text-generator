@@ -5,3 +5,15 @@
   margin: 16px 24px 16px 0;
   float: left;
 }
+
+.row {
+  display: flex;
+}
+
+.col1 {
+  flex-grow: 1;
+}
+
+.col2 {
+  flex-grow: 2;
+}

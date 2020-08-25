@@ -63,10 +63,11 @@ export const loginApiCall = (params) => {
   };
 };
 
+// 리듀서
 const reducer = (state = initialState, action) =>
   produce(state, (draft) => {
-    console.log("reducer state::", state);
-    console.log("reducer action::", action);
+    console.log("user reducer state::", state);
+    console.log("user reducer action::", action);
     switch (action.type) {
       case LOGIN_SUCCESS:
         draft.loginYn = true;
