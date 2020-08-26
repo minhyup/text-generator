@@ -12,7 +12,8 @@ import {
   Checkbox,
   Rate,
   Button,
-  Modal
+  Modal,
+  InputNumber
 } from "antd";
 import QuarterContainer from "@/components/container/QuarterContainer";
 
@@ -126,6 +127,13 @@ function TextGeneratorForm() {
       )
     });
   };
+
+  const onSave = () => {
+    Modal.error({
+      title: "실패!",
+      content: "준비중입니다."
+    });
+  };
   return (
     <div>
       {/* <span>{myTeamData[0].teamName}</span>
@@ -175,6 +183,10 @@ function TextGeneratorForm() {
             <Option value="김포공설">김포공설</Option>
             <Option value="걸포공원">걸포공원</Option>
             <Option value="동을산리">동을산리</Option>
+            <Option value="부천체육관">부천체육관</Option>
+            <Option value="오정구장">오정구장</Option>
+            <Option value="옥길구장">옥길구장</Option>
+            <Option value="북부수자원">북부수자원</Option>
             <Option value="99">기타</Option>
           </Select>
         </Form.Item>
@@ -189,8 +201,6 @@ function TextGeneratorForm() {
           <Radio.Group>
             <Radio.Button value="1">자체경기</Radio.Button>
             <Radio.Button value="2">2파전</Radio.Button>
-            <Radio.Button value="3">3파전</Radio.Button>
-            <Radio.Button value="4">4파전</Radio.Button>
           </Radio.Group>
         </Form.Item>
         <Form.Item
@@ -215,11 +225,29 @@ function TextGeneratorForm() {
           </Checkbox.Group>
         </Form.Item>
 
-        {/* playerList, setPlayerList */}
-        <QuarterContainer
-          playerList={playerList}
-          setPlayerList={setPlayerList}
-        />
+        <Form.Item label="스코어">
+          <Form.Item
+            name="score1"
+            style={{ display: "inline-block", marginRight: "10px" }}
+          >
+            <InputNumber min={0} max={30} />
+          </Form.Item>
+          <div style={{ display: "inline-block" }}>
+            <span> VS </span>
+          </div>
+          <Form.Item
+            name="score2"
+            style={{ display: "inline-block", marginLeft: "10px" }}
+          >
+            <InputNumber min={0} max={30} />
+          </Form.Item>
+        </Form.Item>
+        <Form.Item label="골">
+          <QuarterContainer
+            playerList={playerList}
+            setPlayerList={setPlayerList}
+          />
+        </Form.Item>
 
         <Form.Item label="추가설명" name="description">
           <TextArea rows={4}></TextArea>
@@ -241,7 +269,7 @@ function TextGeneratorForm() {
               </Button>
             </Col>
             <Col>
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="button" onClick={onSave}>
                 저장하기
               </Button>
             </Col>

@@ -1,17 +1,23 @@
 import React from "react";
 import { CloseCircleOutlined } from "@ant-design/icons";
-
+import { List, Typography } from "antd";
+const iconStyle = {
+  fontSize: "18px"
+};
 function QuarterItem({ playerList, scoreType, quarter, onDeleteItem }) {
   return (
     <div>
-      <ul>
-        {playerList.map((item, index) => (
-          <li key={item.player + index}>
-            [{item.type}] {item.quarter}쿼터 {item.player}
-            <CloseCircleOutlined onClick={() => onDeleteItem(index)} />
-          </li>
-        ))}
-      </ul>
+      <List
+        dataSource={playerList}
+        renderItem={(item) => (
+          <List.Item>
+            <List.Item.Meta
+              title={`[${item.type}] ${item.quarter}쿼터`}
+              description={item.player}
+            />
+          </List.Item>
+        )}
+      />
     </div>
   );
 }
