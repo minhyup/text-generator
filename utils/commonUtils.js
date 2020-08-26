@@ -15,3 +15,10 @@ export const codeTransfer = (type, code) => {
       break;
   }
 };
+
+export const delHtmlTag = (str) => {
+  return str.replace(/(<([^>]+)>)/gi, "");
+};
+export const stringToBr = (str) => {
+  return delHtmlTag(str).replace(/(?:\r\n|\r|\n)/g, "<br />");
+};

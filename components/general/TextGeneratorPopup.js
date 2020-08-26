@@ -1,8 +1,9 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import style from "@/styles/style.module.css";
 import dayjs from "dayjs";
+import { Button } from "antd";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { codeTransfer } from "@/utils/commonUtils";
+import { codeTransfer, stringToBr } from "@/utils/commonUtils";
 const memberData = [
   { id: "1", name: "강민협" },
   { id: "2", name: "강태봉" },
@@ -70,7 +71,7 @@ function getJoinMemberNames(joinMemArr) {
   return memNames;
 }
 
-function TextGeneratorPopup({ result, test }) {
+function TextGeneratorPopup({ result }) {
   const {
     rangeTime,
     place,
@@ -81,15 +82,18 @@ function TextGeneratorPopup({ result, test }) {
     rate,
     matchTeam
   } = result;
-  const copyChange = (e) => {
-    console.log("copyChange!~", e);
-  };
+  //const transDescription = stringToBr(description);
+
   const [copyData, setCopyData] = useState("");
+  const [copied, setCopied] = useState(false);
   const copyRef = useRef(null);
 
-  console.log("test::", test);
-  console.log("place::", place);
-  console.log("rangeTime::", rangeTime);
+  useEffect(() => {
+    console.log("oninit");
+    // 생성한 결과를 textarea로 임시 복사
+    setCopyData(copyRef.current.innerText);
+  }, []);
+
   return (
     <div>
       <div>
@@ -120,13 +124,23 @@ function TextGeneratorPopup({ result, test }) {
         <div className={style.col2}>{getJoinMemberNames(joinMember)}</div>
       </div>
       <div className={style.row}>
-        <div className={style.col1}>추가설명</div>
-        <div className={style.col2}>{description}</div>
-      </div>
-      <div className={style.row}>
         <div className={style.col1}>운동강도</div>
         <div className={style.col2}>별 5개 중 {rate}개</div>
       </div>
+      <div className={style.row}>
+        <div className={style.col1}>추가설명</div>
+        <div className={style.col2}>
+          {description.split("\n").map((line) => {
+            return (
+              <span key={line}>
+                {line}
+                <br />
+              </span>
+            );
+          })}
+        </div>
+      </div>
+
       <hr />
       <p ref={copyRef}>
         {dayjs(rangeTime[0]).format("YYYY년 MM월 DD일")} 운동 결과
@@ -142,40 +156,50 @@ function TextGeneratorPopup({ result, test }) {
         <br />
         장소: {place === "99" ? etcPlace : place}
         <br />
-        경기형태:{" "}
+        경기형태:
         {codeTransfer("EXETYPE", exeType) +
           "(" +
           (exeType !== "1" ? matchTeam : "") +
           ")"}
         <br />
+        운동강도: 별 5개 중 {rate}개
+        <br />
         참여인원:
         {getJoinMemberNames(joinMember)}
         <br />
-        운동강도: 별 5개 중 {rate}개
         <br />
-        <br />
-        {description}
+        {description.split("\n").map((line) => {
+          return (
+            <span key={line}>
+              {line}
+              <br />
+            </span>
+          );
+        })}
       </p>
       <hr />
 
-      {/* <button onClick={onCopy}>복사</button> */}
-      {/* <input value={copyData} onChange={copyChange} />
+      <textarea
+        value={copyData}
+        onChange={({ target: { value } }) => {
+          setCopyData(value);
+          setCopied(false);
+        }}
+        style={{ display: "none" }}
+      />
       <CopyToClipboard
         text={copyData}
-        options={{ format: "text/html" }}
         onCopy={(text, result) => {
-          // console.log("CopyToClipboard");
-          // setCopyData(copyRef.current.textContent);
-          // console.log(copyRef.current.textContent);
-          // // setCopyData(copyRef.current.textContent);
-          // // console.log("copyData::", copyData);
-          // // setCopyData(copyRef.current.textContent);
-          // // console.log("aaaaaaa111", copyRef.current.textContent);
-          // console.log("text::", text, "result:::", result);
+          console.log("text::", text, "result:::", result);
+          result ? setCopied(true) : setCopied(false);
         }}
       >
-        <button>복사하기</button>
-      </CopyToClipboard> */}
+        <Button>복사하기</Button>
+      </CopyToClipboard>
+
+      {copied ? (
+        <span style={{ color: "#40c057", marginLeft: "10px" }}>복사완료!</span>
+      ) : null}
     </div>
   );
 }

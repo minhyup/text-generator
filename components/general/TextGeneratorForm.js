@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
+import * as callApi from "@/utils/api";
 import TextGeneratorPopup from "./TextGeneratorPopup";
 import {
   Row,
@@ -13,6 +14,7 @@ import {
   Button,
   Modal
 } from "antd";
+import QuarterContainer from "@/components/container/QuarterContainer";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -43,62 +45,6 @@ const rangeConfig = {
   ]
 };
 
-const teamData = [{ teamId: "1", teamName: "해오름축구클럽" }];
-const memberData = [
-  { id: "1", name: "강민협" },
-  { id: "2", name: "강태봉" },
-  { id: "3", name: "고정호" },
-  { id: "4", name: "곽윤기" },
-  { id: "5", name: "권인현" },
-  { id: "6", name: "김권섭" },
-  { id: "7", name: "김기석" },
-  { id: "8", name: "김낙희" },
-  { id: "9", name: "김상규" },
-  { id: "10", name: "김성준" },
-  { id: "11", name: "김성태" },
-  { id: "12", name: "김양수" },
-  { id: "13", name: "김재평" },
-  { id: "14", name: "김태형" },
-  { id: "15", name: "김학진" },
-  { id: "16", name: "남황현" },
-  { id: "17", name: "민문규" },
-  { id: "18", name: "박영선" },
-  { id: "19", name: "박중호" },
-  { id: "20", name: "석민철" },
-  { id: "21", name: "손홍대" },
-  { id: "22", name: "시명관" },
-  { id: "23", name: "신성식" },
-  { id: "24", name: "심윤식" },
-  { id: "25", name: "심훈" },
-  { id: "26", name: "안명" },
-  { id: "27", name: "양인모" },
-  { id: "28", name: "엄용섭" },
-  { id: "29", name: "염종원" },
-  { id: "30", name: "오상일" },
-  { id: "31", name: "우경진" },
-  { id: "32", name: "유우상" },
-  { id: "33", name: "이민우" },
-  { id: "34", name: "이봉철" },
-  { id: "35", name: "이상연" },
-  { id: "36", name: "이승화" },
-  { id: "37", name: "이연태" },
-  { id: "38", name: "이현주" },
-  { id: "39", name: "임종필" },
-  { id: "40", name: "전현석" },
-  { id: "41", name: "정원호" },
-  { id: "42", name: "정태승" },
-  { id: "43", name: "조경완" },
-  { id: "44", name: "조성민" },
-  { id: "45", name: "조영훈" },
-  { id: "46", name: "주성" },
-  { id: "47", name: "최동우" },
-  { id: "48", name: "최제호" },
-  { id: "49", name: "최필정" },
-  { id: "50", name: "패키초롱" },
-  { id: "51", name: "한승훈" },
-  { id: "52", name: "홍영표" }
-];
-
 function MemberGrid({ memberArr }) {
   console.log("MemberGrid::", memberArr);
   return (
@@ -119,18 +65,23 @@ function MemberGrid({ memberArr }) {
 function TextGeneratorForm() {
   const [etcPlaceYn, setEtcPlaceYn] = useState(true);
   const [exeTypeYn, setExeTypeYn] = useState(true);
-  //  const [copyData, setCopyData] = useState("");
-  //  const copyRef = useRef(null);
+  const [myTeamData, setMyTeamData] = useState(null);
+  const [myTeamMember, setMyTeamMember] = useState(null);
+  const [playerList, setPlayerList] = useState([]);
+  // 마운트
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const resTeam = await callApi.getMyTeamInfo();
+        setMyTeamData(resTeam);
 
-  // const onCopy = (e) => {
-  //   console.log("onCopy");
-  //   // console.log(e, copyRef);
-  //   // //copyRef.current.select();
-  //   // console.log(copyRef.current.textContent);
-  //   setCopyData(copyRef.current.textContent);
-  //   // console.log("copyData::", copyData);
-  //   // //document.execCommand("copy");
-  // };
+        const resMem = await callApi.getMembers("1");
+        setMyTeamMember(resMem);
+      } catch (e) {}
+    }
+
+    fetchData();
+  }, []);
 
   const onValuesChange = (changedValues, allValues) => {
     console.log(changedValues, allValues);
@@ -157,24 +108,27 @@ function TextGeneratorForm() {
 
     const { rangeTime } = values;
 
+    values.playerList = playerList;
+
+    console.log("onSubmitForm:: after", values);
+
     if (!rangeTime) {
       return;
     }
 
-    const test = "aaaaa";
     Modal.success({
       title: "결과 생성 완료!",
       width: "500px",
       content: (
         <div>
-          <TextGeneratorPopup result={values} test={test} />
+          <TextGeneratorPopup result={values} />
         </div>
       )
     });
   };
   return (
     <div>
-      {/* <span>{teamData[0].teamName}</span>
+      {/* <span>{myTeamData[0].teamName}</span>
       <Row>
         <Col span={24}>col</Col>
       </Row>
@@ -201,7 +155,7 @@ function TextGeneratorForm() {
         initialValues={{ rate: 3 }}
       >
         <Form.Item label="팀명">
-          <span>{teamData[0].teamName}</span>
+          <span>{myTeamData ? myTeamData[0].teamName : null}</span>
         </Form.Item>
         <Form.Item label="구분" name="genType">
           <Radio.Group>
@@ -248,16 +202,25 @@ function TextGeneratorForm() {
         </Form.Item>
         <Form.Item name="joinMember" label="회원">
           <Checkbox.Group>
-            {memberData.map((item, index) =>
-              index % 4 === 0 ? (
-                <MemberGrid
-                  key={item.id + index}
-                  memberArr={memberData.slice(index, index + 4)}
-                />
-              ) : null
-            )}
+            {myTeamMember
+              ? myTeamMember.map((item, index) =>
+                  index % 4 === 0 ? (
+                    <MemberGrid
+                      key={item.id + index}
+                      memberArr={myTeamMember.slice(index, index + 4)}
+                    />
+                  ) : null
+                )
+              : null}
           </Checkbox.Group>
         </Form.Item>
+
+        {/* playerList, setPlayerList */}
+        <QuarterContainer
+          playerList={playerList}
+          setPlayerList={setPlayerList}
+        />
+
         <Form.Item label="추가설명" name="description">
           <TextArea rows={4}></TextArea>
         </Form.Item>
